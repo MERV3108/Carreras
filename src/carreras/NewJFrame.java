@@ -3,21 +3,86 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package carreras;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+//import java.util.Timer;
+import javax.swing.Timer;
 /**
  *
  * @author manue
  */
 public class NewJFrame extends javax.swing.JFrame {
+    StringBuilder texto = new StringBuilder();
+    Timer[] timers = new Timer[10];
+    Boolean func = false;
+    int[] i= new int[401];
+    Boolean gotcha = false;
+    int carr=2;
+    int winner; //quien gano
 
-    /**
-     * Creates new form NewJFrame
-     */
-    Timer timer;
-    TimerTask timertask;
-     Boolean funcionando = false;
+    public void metodo(int pos) {
+        if (i[pos] < 200) { //establece la meta
+            switch (pos) {
+                case 1 -> {
+                    i[pos]++;
+                    jButton1.setLocation(i[pos], 12);
+                    
+                }
+                case 2 -> {
+                    i[pos]++;
+                    jButton2.setLocation(i[pos], 46);
+                }
+                case 3 -> {
+                    i[pos]++;
+                    jButton3.setLocation(i[pos], 80);
+                }
+                case 4 -> {
+                    i[pos]++;
+                    jButton4.setLocation(i[pos], 114);
+                }
+                case 5 -> {
+                    i[pos]++;
+                    jButton5.setLocation(i[pos], 148);
+                }
+                case 6 -> {
+                    i[pos]++;
+                    jButton6.setLocation(i[pos], 182);
+                }
+                case 7 -> {
+                    i[pos]++;
+                    jButton7.setLocation(i[pos], 216);
+                }
+                case 8 -> {
+                    i[pos]++;
+                    jButton8.setLocation(i[pos], 250);
+                }
+                case 9 -> {
+                    i[pos]++;
+                    jButton9.setLocation(i[pos], 284);
+                }
+                case 10 -> {
+                    i[pos]++;
+                    jButton10.setLocation(i[pos], 318);
+                }
 
+            }
+        } else {
+            timers[pos - 1].stop();  // Detiene el temporizador cuando i llega a la meta
+            ganador(pos);
+        }
+    }
+
+    public void ganador(int win){
+        if(!gotcha){
+            texto.append("!!GANADOR!! Carro #").append(win);
+            winner=win;
+            gotcha=true;
+        }else{
+                texto.append("\n").append(carr).append(". Carro #").append(win);
+                carr++;
+        }
+        jTextArea1.setText(texto.toString());
+    }
     public NewJFrame() {
         initComponents();
     }
@@ -113,19 +178,19 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton8)
                     .addComponent(jButton10)
                     .addComponent(jButton9)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton8)
+                            .addComponent(jButton3)
                             .addComponent(jButton7)
                             .addComponent(jButton4)
                             .addComponent(jButton5)
                             .addComponent(jButton6))
                         .addGap(205, 205, 205)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(279, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,10 +199,10 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -145,12 +210,12 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7))
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton8))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton8)
+                        .addGap(19, 19, 19)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -200,44 +265,18 @@ public class NewJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-//        System.out.println(jButton1.getLocation());
-//        System.out.println(jButton2.getLocation());
-//        System.out.println(jButton3.getLocation());
-//        System.out.println(jButton4.getLocation());
-//        System.out.println(jButton5.getLocation());
-//        System.out.println(jButton6.getLocation());
-//        System.out.println(jButton7.getLocation());
-//        System.out.println(jButton8.getLocation());
-//        System.out.println(jButton9.getLocation());
-//        System.out.println(jButton10.getLocation());
-        
-        if (!funcionando) {
-            timer = new Timer();
-            timertask = new TimerTask() {
-                int i = 5;
 
-                @Override
-                public void run() {
-                    jButton1.setLocation(i, 12); //Ubica el jLabel1 en las
-                    jButton2.setLocation(i, 46);
-                    jButton4.setLocation(i, 80);
-                    jButton3.setLocation(i, 114);
-                    jButton5.setLocation(i, 148);
-                    jButton6.setLocation(i, 182);
-                    jButton7.setLocation(i, 216);
-                    jButton8.setLocation(i, 250);
-                    jButton9.setLocation(i, 284);
-                    jButton10.setLocation(i, 318);
-                    i++; //coordenadas (i,5)
-                }
-            };
-            timer.scheduleAtFixedRate(timertask, 0, 10);
-            funcionando = true;
-            jToggleButton1.setText("Detener");
-        } else {
-            timer.cancel(); //Cancela el Timer
-            funcionando = false;
-            jToggleButton1.setText("Iniciar");
+            if (!func) {
+            for (int j = 0; j < 10; j++) {
+                final int pos = j+1;
+                int delay = (j + 1) * 10;  // Esto hará que cada botón se mueva a una velocidad diferente es decir aqui vendria el aleatorio
+                timers[j] = new Timer(delay, new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        metodo(pos);
+                    }
+                });
+                timers[j].start();
+            }
         }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
