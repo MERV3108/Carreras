@@ -2,6 +2,7 @@
 package carreras;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Random;
 
 /**
  *
@@ -14,6 +15,7 @@ public class Carreras {
         timer = new Timer();
         timer.schedule(new Recordatorio(), segundos * 1000);//Programa la tarea
     }
+    
 
     class Recordatorio extends TimerTask {
 
@@ -22,4 +24,5 @@ public class Carreras {
             timer.cancel(); //Termina el hilo del timer
         }
     }
+    
 }
