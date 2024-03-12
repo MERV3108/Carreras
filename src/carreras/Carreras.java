@@ -2,8 +2,6 @@
 package carreras;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Random;
-
 /**
  *
  * @author manue

@@ -13,7 +13,7 @@ import javax.swing.Timer;
  */
 public class NewJFrame extends javax.swing.JFrame {
     StringBuilder texto = new StringBuilder();
-    String Seleccion;
+    String Seleccion; // variable dispues para la apuesta, obigatoriamente debe ser string
     Timer[] timers = new Timer[10];
     Boolean func = false;
     int[] i= new int[401];
@@ -71,13 +71,6 @@ public class NewJFrame extends javax.swing.JFrame {
             timers[pos - 1].stop();  // Detiene el temporizador cuando i llega a la meta
             ganador(pos);
         }
-        int seleccionInt =Integer.parseInt(Seleccion);
-        if(seleccionInt == winner ){
-            jTextArea2.setText("¡Ganaste la apuesta!");
-        } 
-        else{
-        jTextArea2.setText("Perdiste");
-        }
     }
 
     public void ganador(int win){
@@ -90,6 +83,18 @@ public class NewJFrame extends javax.swing.JFrame {
                 carr++;
         }
         jTextArea1.setText(texto.toString());
+        try {//se tuvo que poner un try, porque los datos del boton son string y toca si o si ponerlos en int. con eso hacemos la excepcion
+            int seleccionInt = Integer.parseInt(Seleccion);//cambio de variable
+            if(seleccionInt == winner){
+                jTextArea2.setText("¡Ganaste la apuesta!");
+            } 
+            else {
+                jTextArea2.setText("Perdiste");
+            }
+        } 
+        catch (NumberFormatException e) {//se puso en el caso que hubiera algun error en la progrma
+            jTextArea2.setText("Selección inválida. Por favor, elige un número de carro.");
+        }
     }
     public NewJFrame() {
         initComponents();
@@ -118,7 +123,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jSlider1 = new javax.swing.JSlider();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        SeleccionAuto = new javax.swing.JComboBox<>();
         jToggleButton1 = new javax.swing.JToggleButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
@@ -186,10 +191,10 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"1","2"}));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        SeleccionAuto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        SeleccionAuto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                SeleccionAutoActionPerformed(evt);
             }
         });
 
@@ -217,25 +222,24 @@ public class NewJFrame extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(188, 188, 188)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(154, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1)
                             .addComponent(jButton2))
-                        .addGap(544, 544, 544)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(172, 172, 172))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(SeleccionAuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(SeleccionAuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -321,15 +325,15 @@ public class NewJFrame extends javax.swing.JFrame {
             if (!func) {
             for (int j = 0; j < 10; j++) {
                 final int pos = j+1;
-                delay[j]=(int)(Math.random());  // Esto hará que cada botón se mueva a una velocidad diferente es decir aqui vendria el aleatorio
+                delay[j]=(int)(Math.random());  // se agrago una funcion de aleatoria, para que los tiempos sean distintos para cada carro (boton)
                 timers[j] = new Timer(delay[j], new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         metodo(pos);
                     }
                 });
                 timers[j].start();
-                Seleccion = (String) jComboBox1.getSelectedItem();
             }
+            Seleccion = (String) SeleccionAuto.getSelectedItem();// produce que se seleccione laopcion de boton SeleccionAuto
         }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
@@ -366,7 +370,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jSlider1StateChanged
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
+        /// este boton tiene la finalidad de reiniciar todas las fucniones desde cero, para con ello volver a ejecutar el programa sin salirce
         for (int j = 0; j < 10; j++) {
             i[j] = 0;
             if(j>0){
@@ -375,8 +379,12 @@ public class NewJFrame extends javax.swing.JFrame {
         }
         texto.setLength(0);
         jTextArea1.setText("");
+        jTextArea2.setText("");
         gotcha = false;
         carr = 2;
+        timers = new Timer[10];
+        func = false;
+        i= new int[401];
         jButton1.setLocation(0, 12);
         jButton2.setLocation(0, 46);
         jButton3.setLocation(0, 80);
@@ -389,10 +397,9 @@ public class NewJFrame extends javax.swing.JFrame {
         jButton10.setLocation(0, 318);
     }//GEN-LAST:event_jButton12ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void SeleccionAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeleccionAutoActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_SeleccionAutoActionPerformed
     
     /**
      * @param args the command line arguments
@@ -430,6 +437,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> SeleccionAuto;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton12;
@@ -441,7 +449,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    public javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
