@@ -37,44 +37,44 @@ public class NewJFrame extends javax.swing.JFrame {
         if (i[pos] < 820) { //establece la meta
             switch (pos) {
                 case 1 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton1.setLocation(i[pos], 6);
                     
                 }
                 case 2 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton2.setLocation(i[pos], 51);
                 }
                 case 3 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton3.setLocation(i[pos], 95);
                 }
                 case 4 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton4.setLocation(i[pos], 139);
                 }
                 case 5 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton5.setLocation(i[pos], 182);
                 }
                 case 6 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton6.setLocation(i[pos], 225);
                 }
                 case 7 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton7.setLocation(i[pos], 268);
                 }
                 case 8 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton8.setLocation(i[pos], 311);
                 }
                 case 9 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton9.setLocation(i[pos], 354);
                 }
                 case 10 -> {
-                    i[pos]++;
+                    i[pos]+=5;
                     jButton10.setLocation(i[pos], 397);
                 }
 
@@ -567,16 +567,16 @@ public class NewJFrame extends javax.swing.JFrame {
         timers = new Timer[10];
         func = false;
         i= new int[401];
-        jButton1.setLocation(0, 12);
-        jButton2.setLocation(0, 46);
-        jButton3.setLocation(0, 80);
-        jButton4.setLocation(0, 114);
-        jButton5.setLocation(0, 148);
-        jButton6.setLocation(0, 182);
-        jButton7.setLocation(0, 216);
-        jButton8.setLocation(0, 250);
-        jButton9.setLocation(0, 284);
-        jButton10.setLocation(0, 318);
+        jButton1.setLocation(0, 6);
+        jButton2.setLocation(0, 51);
+        jButton3.setLocation(0, 95);
+        jButton4.setLocation(0, 139);
+        jButton5.setLocation(0, 182);
+        jButton6.setLocation(0, 225);
+        jButton7.setLocation(0, 268);
+        jButton8.setLocation(0, 311);
+        jButton9.setLocation(0, 354);
+        jButton10.setLocation(0, 397);
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void SeleccionAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeleccionAutoActionPerformed
