@@ -25,7 +25,6 @@ public class NewJFrame extends javax.swing.JFrame {
     StringBuilder texto = new StringBuilder();
     String Seleccion; // variable dispues para la apuesta, obigatoriamente debe ser string
     Timer[] timers = new Timer[10];
-    Boolean func = false;
     int[] i= new int[401];
     Boolean gotcha = false;
     int carr=2;
@@ -90,18 +89,22 @@ public class NewJFrame extends javax.swing.JFrame {
             texto.append("!!GANADOR!!\t--1. Carro #").append(win).append("--");
             winner=win;
             gotcha=true;
+            jTextArea1.setBackground(Color.YELLOW);
         }else{
                 texto.append("\n\t").append(carr).append(". Carro #").append(win);
                 carr++;
+                jTextArea1.setBackground(Color.GREEN);
         }
         jTextArea1.setText(texto.toString());
         try {//se tuvo que poner un try, porque los datos del boton son string y toca si o si ponerlos en int. con eso hacemos la excepcion
             int seleccionInt = Integer.parseInt(Seleccion);//cambio de variable
             if(seleccionInt == winner){
                 jTextArea2.setText("¡Ganaste la apuesta!");
+                jTextArea2.setBackground(Color.GREEN);
             } 
             else {
                 jTextArea2.setText("Perdiste");
+                jTextArea2.setBackground(Color.red);
             }
         } 
         catch (NumberFormatException e) {//se puso en el caso que hubiera algun error en la progrma
@@ -359,7 +362,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setBackground(new java.awt.Color(153, 153, 255));
+        jTextArea1.setBackground(javax.swing.UIManager.getDefaults().getColor("Actions.Grey"));
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
@@ -367,6 +370,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         sped.setBackground(new java.awt.Color(0, 255, 0));
         sped.setForeground(new java.awt.Color(255, 0, 0));
+        sped.setMaximum(1000);
         sped.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 spedStateChanged(evt);
@@ -391,7 +395,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         SeleccionAuto.setBackground(new java.awt.Color(204, 204, 255));
         SeleccionAuto.setForeground(new java.awt.Color(204, 204, 255));
-        SeleccionAuto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        SeleccionAuto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         SeleccionAuto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SeleccionAutoActionPerformed(evt);
@@ -498,8 +502,8 @@ public class NewJFrame extends javax.swing.JFrame {
 //        System.out.println(jButton8.getLocation());
 //        System.out.println(jButton9.getLocation());
 //        System.out.println(jButton10.getLocation());
-
-        if (!func) {
+        jTextArea2.setText("Corriendo...");
+        if (SeleccionAuto.getSelectedIndex()!=0) {
             for (int j = 0; j < 10; j++) {
                 final int pos = j+1;
                 delay[j]=(int)(Math.random()*10);  // se agrago una funcion de aleatoria, para que los tiempos sean distintos para cada carro (boton)
@@ -511,7 +515,8 @@ public class NewJFrame extends javax.swing.JFrame {
                 timers[j].start();
             }
             Seleccion = (String) SeleccionAuto.getSelectedItem();// produce que se seleccione la opcion de boton SeleccionAuto
-        }
+        }else
+            jTextArea2.setText("Seleccione una apuesta: ");
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -561,12 +566,14 @@ public class NewJFrame extends javax.swing.JFrame {
         }
         texto.setLength(0);
         jTextArea1.setText("");
-        jTextArea2.setText("");
+        jTextArea2.setText("Seleccione una apuesta...");
+        jTextArea1.setBackground(Color.GRAY);
+        jTextArea2.setBackground(Color.GRAY);
         gotcha = false;
         carr = 2;
         timers = new Timer[10];
-        func = false;
         i= new int[401];
+        SeleccionAuto.setSelectedIndex(0);
         jButton1.setLocation(0, 6);
         jButton2.setLocation(0, 51);
         jButton3.setLocation(0, 95);
