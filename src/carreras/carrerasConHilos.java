@@ -4,10 +4,6 @@
  */
 package carreras;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-//import java.util.Timer;
-import javax.swing.Timer;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Graphics;
@@ -18,114 +14,80 @@ import javax.swing.JPanel;
  *
  * @author manue
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class carrerasConHilos extends javax.swing.JFrame {
     //estiloo
     Fondopanel fondo = new Fondopanel();
     //code
     StringBuilder texto = new StringBuilder();
-    String Seleccion; // variable dispues para la apuesta, obigatoriamente debe ser string
-    Timer[] timers = new Timer[10];
     int[] i= new int[401];
     Boolean gotcha = false;
     int carr=2;
-    int winner; //quien gano
     int aceleracion;
-    int delay[]= new int [100];
-
+    double demora, salida, llegada;
     public void metodo(int pos) {
-        if (i[pos] < 820) { //establece la meta
+        salida = System.nanoTime();
+        while (i[pos] < 820) { //establece la meta
+            i[pos] += (int) (Math.random() * 10); // velocidad aleatoria
             switch (pos) {
-                case 1 -> {
-                    i[pos]+=5;
-                    jButton1.setLocation(i[pos], 6);
-                    
-                }
-                case 2 -> {
-                    i[pos]+=5;
-                    jButton2.setLocation(i[pos], 51);
-                }
-                case 3 -> {
-                    i[pos]+=5;
-                    jButton3.setLocation(i[pos], 95);
-                }
-                case 4 -> {
-                    i[pos]+=5;
-                    jButton4.setLocation(i[pos], 139);
-                }
-                case 5 -> {
-                    i[pos]+=5;
-                    jButton5.setLocation(i[pos], 182);
-                }
-                case 6 -> {
-                    i[pos]+=5;
-                    jButton6.setLocation(i[pos], 225);
-                }
-                case 7 -> {
-                    i[pos]+=5;
-                    jButton7.setLocation(i[pos], 268);
-                }
-                case 8 -> {
-                    i[pos]+=5;
-                    jButton8.setLocation(i[pos], 311);
-                }
-                case 9 -> {
-                    i[pos]+=5;
-                    jButton9.setLocation(i[pos], 354);
-                }
-                case 10 -> {
-                    i[pos]+=5;
-                    jButton10.setLocation(i[pos], 397);
-                }
-
+                case 1 ->
+                    carro1.setLocation(i[pos], 6);
+                case 2 ->
+                    carro2.setLocation(i[pos], 51);
+                case 3 ->
+                    carro3.setLocation(i[pos], 95);
+                case 4 ->
+                    carro4.setLocation(i[pos], 139);
+                case 5 ->
+                    carro5.setLocation(i[pos], 182);
+                case 6 ->
+                    carro6.setLocation(i[pos], 225);
+                case 7 ->
+                    carro7.setLocation(i[pos], 268);
+                case 8 ->
+                    carro8.setLocation(i[pos], 311);
+                case 9 ->
+                    carro9.setLocation(i[pos], 354);
+                case 10 ->
+                    carro10.setLocation(i[pos], 397);
             }
-        } else {
-            timers[pos - 1].stop();  // Detiene el temporizador cuando i llega a la meta
-            ganador(pos);
+            try {
+                Thread.sleep(aceleracion); //varia la pausa para determinar la velocidad
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        ganador(pos);
     }
 
     public void ganador(int win){
+        llegada = System.nanoTime();
+        demora=(llegada-salida)/1000000000.0;
         if(!gotcha){
-            texto.append("!!GANADOR!!\t--1. Carro #").append(win).append("--");
-            winner=win;
+            texto.append("!!GANADOR!!\t--1. Carro #").append(win).append("--").append(" : ").append(demora).append(" seg");
             gotcha=true;
             jTextArea1.setBackground(Color.YELLOW);
         }else{
-                texto.append("\n\t").append(carr).append(". Carro #").append(win);
+                texto.append("\n\t").append(carr).append(". Carro #").append(win).append(" : ").append(demora).append(" seg");
                 carr++;
                 jTextArea1.setBackground(Color.GREEN);
         }
         jTextArea1.setText(texto.toString());
-        try {//se tuvo que poner un try, porque los datos del boton son string y toca si o si ponerlos en int. con eso hacemos la excepcion
-            int seleccionInt = Integer.parseInt(Seleccion);//cambio de variable
-            if(seleccionInt == winner){
-                jTextArea2.setText("¡Ganaste la apuesta!");
-                jTextArea2.setBackground(Color.GREEN);
-            } 
-            else {
-                jTextArea2.setText("Perdiste");
-                jTextArea2.setBackground(Color.red);
-            }
-        } 
-        catch (NumberFormatException e) {//se puso en el caso que hubiera algun error en la progrma
-            jTextArea2.setText("Selección inválida. Por favor, elige un número de carro.");
-        }
     }
-    public NewJFrame() {
+    public carrerasConHilos() {
         initComponents();
         Color colorPersonalizado = new Color(3,1,35); // color de fondo
         //imagenes en los botones
         getContentPane().setBackground(colorPersonalizado);
-        jButton1.setIcon(setIcono("/imagenes/car1.png", jButton1));
-        jButton2.setIcon(setIcono("/imagenes/car2.png", jButton2));
-        jButton3.setIcon(setIcono("/imagenes/car3.png", jButton3));
-        jButton4.setIcon(setIcono("/imagenes/car4.png", jButton4));
-        jButton5.setIcon(setIcono("/imagenes/car5.png", jButton5));
-        jButton6.setIcon(setIcono("/imagenes/car6.png", jButton6));
-        jButton7.setIcon(setIcono("/imagenes/car7.png", jButton7));
-        jButton8.setIcon(setIcono("/imagenes/car8.png", jButton8));
-        jButton9.setIcon(setIcono("/imagenes/car9.png", jButton9));
-        jButton10.setIcon(setIcono("/imagenes/car10.png", jButton10));
+        carro1.setIcon(setIcono("/imagenes/car1.png", carro1));
+        carro2.setIcon(setIcono("/imagenes/car2.png", carro2));
+        carro3.setIcon(setIcono("/imagenes/car3.png", carro3));
+        carro4.setIcon(setIcono("/imagenes/car4.png", carro4));
+        carro5.setIcon(setIcono("/imagenes/car5.png", carro5));
+        carro6.setIcon(setIcono("/imagenes/car6.png", carro6));
+        carro7.setIcon(setIcono("/imagenes/car7.png", carro7));
+        carro8.setIcon(setIcono("/imagenes/car8.png", carro8));
+        carro9.setIcon(setIcono("/imagenes/car9.png", carro9));
+        carro10.setIcon(setIcono("/imagenes/car10.png", carro10));
     }
 
     /**
@@ -138,16 +100,16 @@ public class NewJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new Fondopanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        carro1 = new javax.swing.JButton();
+        carro2 = new javax.swing.JButton();
+        carro4 = new javax.swing.JButton();
+        carro3 = new javax.swing.JButton();
+        carro5 = new javax.swing.JButton();
+        carro6 = new javax.swing.JButton();
+        carro7 = new javax.swing.JButton();
+        carro8 = new javax.swing.JButton();
+        carro9 = new javax.swing.JButton();
+        carro10 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -159,61 +121,56 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jToggleButton1 = new javax.swing.JToggleButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
         jButton12 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         sped = new javax.swing.JSlider();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        SeleccionAuto = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
 
-        jButton1.setBorder(null);
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setDefaultCapable(false);
-        jButton1.setOpaque(true);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        carro1.setBorder(null);
+        carro1.setBorderPainted(false);
+        carro1.setContentAreaFilled(false);
+        carro1.setDefaultCapable(false);
+        carro1.setOpaque(true);
+        carro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                carro1ActionPerformed(evt);
             }
         });
 
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        carro2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                carro2ActionPerformed(evt);
             }
         });
 
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        carro3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                carro3ActionPerformed(evt);
             }
         });
 
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        carro5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                carro5ActionPerformed(evt);
             }
         });
 
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        carro6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                carro6ActionPerformed(evt);
             }
         });
 
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        carro10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                carro10ActionPerformed(evt);
             }
         });
 
@@ -257,16 +214,16 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addComponent(jLabel16))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(carro1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro8, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                    .addComponent(carro9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(carro10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -275,63 +232,63 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(carro1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(jLabel7)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(carro2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jLabel8)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(carro3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addComponent(jLabel9)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carro4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel10)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carro5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addComponent(jLabel11)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carro6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel12)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carro7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel13)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carro8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(jLabel14)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carro9, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addComponent(jLabel15)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(carro10, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel16)))
@@ -347,11 +304,6 @@ public class NewJFrame extends javax.swing.JFrame {
                 jToggleButton1ActionPerformed(evt);
             }
         });
-
-        jTextArea2.setBackground(new java.awt.Color(204, 204, 255));
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
 
         jButton12.setBackground(new java.awt.Color(255, 0, 0));
         jButton12.setFont(new java.awt.Font("Hack Nerd Font Propo", 0, 12)); // NOI18N
@@ -381,26 +333,9 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Velocidad");
 
-        jLabel4.setFont(new java.awt.Font("Hack Nerd Font Propo", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Resultados:");
-
         jLabel2.setFont(new java.awt.Font("Hack Nerd Font Propo", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Tabla de ganadores:");
-
-        jLabel1.setFont(new java.awt.Font("Hack Nerd Font Propo", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Escoja su auto:");
-
-        SeleccionAuto.setBackground(new java.awt.Color(204, 204, 255));
-        SeleccionAuto.setForeground(new java.awt.Color(204, 204, 255));
-        SeleccionAuto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        SeleccionAuto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SeleccionAutoActionPerformed(evt);
-            }
-        });
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("+");
@@ -422,17 +357,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jButton12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(SeleccionAuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jButton12))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,11 +371,15 @@ public class NewJFrame extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(149, 149, 149)
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(85, 85, 85))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(213, 213, 213))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1)
+                                .addGap(15, 15, 15))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -462,28 +391,19 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(sped, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel6))
-                                        .addGap(18, 18, 18))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton12)
-                                    .addComponent(jLabel4)))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SeleccionAuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(sped, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)))
+                        .addComponent(jButton12))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -492,103 +412,70 @@ public class NewJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-//        System.out.println(jButton1.getLocation());
-//        System.out.println(jButton2.getLocation());
-//        System.out.println(jButton3.getLocation());
-//        System.out.println(jButton4.getLocation());
-//        System.out.println(jButton5.getLocation());
-//        System.out.println(jButton6.getLocation());
-//        System.out.println(jButton7.getLocation());
-//        System.out.println(jButton8.getLocation());
-//        System.out.println(jButton9.getLocation());
-//        System.out.println(jButton10.getLocation());
-        jTextArea2.setText("Corriendo...");
-        if (SeleccionAuto.getSelectedIndex()!=0) {
-            for (int j = 0; j < 10; j++) {
-                final int pos = j+1;
-                delay[j]=(int)(Math.random()*10);  // se agrago una funcion de aleatoria, para que los tiempos sean distintos para cada carro (boton)
-                timers[j] = new Timer(delay[j], new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        metodo(pos);
-                    }
-                });
-                timers[j].start();
-            }
-            Seleccion = (String) SeleccionAuto.getSelectedItem();// produce que se seleccione la opcion de boton SeleccionAuto
-        }else
-            jTextArea2.setText("Seleccione una apuesta: ");
+        for (int j = 1; j <= 10; j++) {
+            final int carro = j;
+            Thread t = new Thread() {
+                @Override
+                public void run() {
+                    metodo(carro);
+                }
+            };
+            t.start();
+        }
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void carro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carro2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_carro2ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void carro6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carro6ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_carro6ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void carro5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carro5ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_carro5ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void carro3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carro3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_carro3ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void carro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carro1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_carro1ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void carro10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carro10ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_carro10ActionPerformed
 
     private void spedStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spedStateChanged
         // TODO add your handling code here:
-        aceleracion = sped.getValue();
-        for (int j = 0; j < 10; j++) {
-            int temp = aceleracion+delay[j];
-            if(temp>0){
-                timers[j].setDelay(temp);
-                //System.out.println(aceleracion+"   "+timers[1].getDelay()+"  ");
-            }else{}
-                //System.out.println("invalid "+temp);
-        }
+            aceleracion = sped.getValue();
+        
     }//GEN-LAST:event_spedStateChanged
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         /// este boton tiene la finalidad de reiniciar todas las fucniones desde cero, para con ello volver a ejecutar el programa sin salirce
-        for (int j = 0; j < 10; j++) {
-            i[j] = 0;
-            if(j>0){
-                timers[j - 1].stop();
-            }
-        }
         texto.setLength(0);
         jTextArea1.setText("");
-        jTextArea2.setText("Seleccione una apuesta...");
+        
         jTextArea1.setBackground(Color.GRAY);
-        jTextArea2.setBackground(Color.GRAY);
+        
         gotcha = false;
         carr = 2;
-        timers = new Timer[10];
         i= new int[401];
-        SeleccionAuto.setSelectedIndex(0);
-        jButton1.setLocation(0, 6);
-        jButton2.setLocation(0, 51);
-        jButton3.setLocation(0, 95);
-        jButton4.setLocation(0, 139);
-        jButton5.setLocation(0, 182);
-        jButton6.setLocation(0, 225);
-        jButton7.setLocation(0, 268);
-        jButton8.setLocation(0, 311);
-        jButton9.setLocation(0, 354);
-        jButton10.setLocation(0, 397);
+        
+        carro1.setLocation(0, 6);
+        carro2.setLocation(0, 51);
+        carro3.setLocation(0, 95);
+        carro4.setLocation(0, 139);
+        carro5.setLocation(0, 182);
+        carro6.setLocation(0, 225);
+        carro7.setLocation(0, 268);
+        carro8.setLocation(0, 311);
+        carro9.setLocation(0, 354);
+        carro10.setLocation(0, 397);
     }//GEN-LAST:event_jButton12ActionPerformed
-
-    private void SeleccionAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeleccionAutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SeleccionAutoActionPerformed
     
     /**
      * @param args the command line arguments
@@ -607,38 +494,39 @@ public class NewJFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(carrerasConHilos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(carrerasConHilos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(carrerasConHilos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(carrerasConHilos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                new carrerasConHilos().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> SeleccionAuto;
-    public javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
+    public javax.swing.JButton carro1;
+    private javax.swing.JButton carro10;
+    private javax.swing.JButton carro2;
+    private javax.swing.JButton carro3;
+    private javax.swing.JButton carro4;
+    private javax.swing.JButton carro5;
+    private javax.swing.JButton carro6;
+    private javax.swing.JButton carro7;
+    private javax.swing.JButton carro8;
+    private javax.swing.JButton carro9;
     private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -648,7 +536,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -656,9 +543,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JSlider sped;
     // End of variables declaration//GEN-END:variables
